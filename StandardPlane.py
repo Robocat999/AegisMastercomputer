@@ -6,8 +6,9 @@ class StandardPlane:
         self.pitch = 0
         self.roll = 0
         self.heading = 0
-        self.airspeed = 0
+        self.velocity = 0
         self.altitude = 0
+        self.stick_pos_modifier = 0
 
         self.roll_pitch_mods = {
             0: {
