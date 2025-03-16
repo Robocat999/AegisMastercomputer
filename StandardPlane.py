@@ -5,7 +5,7 @@ class StandardPlane:
 
         self.pitch = 0
         self.roll = 0
-        self.yaw = 0
+        self.heading = 0
         self.airspeed = 0
         self.altitude = 0
 
@@ -230,4 +230,158 @@ class StandardPlane:
             -135: -15,
             -150: -10,
             -165: -5
+        }
+
+        self.pitch_roll_to_heading_mods = {
+            0: 0,
+            15: 0,
+            30: -.25,
+            45: -.33334,
+            60: -.5,
+            75: -.5,
+            90: -1,
+            105: -.5,
+            120: -.5,
+            135: -.33334,
+            150: -.25,
+            165: 0,
+            180: 0,
+            -15: 0,
+            -30: .25,
+            -45: .33334,
+            -60: .5,
+            -75: .5,
+            -90: 1,
+            -105: .5,
+            -120: .5,
+            -135: .33334,
+            -150: .25,
+            -165: 0
+
+        }
+        self.pitch_yaw_mods = {
+            0: {
+                "heading_per_yaw": 1,
+                "pitch_per_yaw": 0,
+                "roll_per_yaw": 0
+            },
+            15: {
+                "heading_per_yaw": 1,
+                "pitch_per_yaw": -.25,
+                "roll_per_yaw": .25
+            },
+            30: {
+                "heading_per_yaw": 1,
+                "pitch_per_yaw": -.33334,
+                "roll_per_yaw": .33334
+            },
+            45: {
+                "heading_per_yaw": 1,
+                "pitch_per_yaw": -.5,
+                "roll_per_yaw": .5
+            },
+            60: {
+                "heading_per_yaw": 1,
+                "pitch_per_yaw": -.5,
+                "roll_per_yaw": .5
+            },
+            75: {
+                "heading_per_yaw": 1,
+                "pitch_per_yaw": -1,
+                "roll_per_yaw": 1
+            },
+            90: {
+                "heading_per_yaw": 1,
+                "pitch_per_yaw": -1,
+                "roll_per_yaw": 1,
+                "true_degree_of_change_correction": -90  # Hand trick the movement to understand why this is
+                # TODO: Check if all maneuvers in this list do that weird movement thing
+            },
+            105: {
+                "heading_per_yaw": -1,
+                "pitch_per_yaw": -1,
+                "roll_per_yaw": 1
+            },
+            120: {
+                "heading_per_yaw": -1,
+                "pitch_per_yaw": -.5,
+                "roll_per_yaw": .5
+            },
+            135: {
+                "heading_per_yaw": -1,
+                "pitch_per_yaw": -.5,
+                "roll_per_yaw": .5
+            },
+            150: {
+                "heading_per_yaw": -1,
+                "pitch_per_yaw": -.33334,
+                "roll_per_yaw": .33334
+            },
+            165: {
+                "heading_per_yaw": -1,
+                "pitch_per_yaw": -.25,
+                "roll_per_yaw": .25
+            },
+            180: {
+                "heading_per_yaw": 1,
+                "pitch_per_yaw": 0,
+                "roll_per_yaw": 0
+            },
+            -15: {
+                "heading_per_yaw": 1,
+                "pitch_per_yaw": .25,
+                "roll_per_yaw": -.25
+            },
+            -30: {
+                "heading_per_yaw": 1,
+                "pitch_per_yaw": .33334,
+                "roll_per_yaw": -.33334
+            },
+            -45: {
+                "heading_per_yaw": 1,
+                "pitch_per_yaw": .5,
+                "roll_per_yaw": -.5
+            },
+            -60: {
+                "heading_per_yaw": 1,
+                "pitch_per_yaw": .5,
+                "roll_per_yaw": -.5
+            },
+            -75: {
+                "heading_per_yaw": 1,
+                "pitch_per_yaw": 1,
+                "roll_per_yaw": -1
+            },
+            -90: {
+                "heading_per_yaw": 1,
+                "pitch_per_yaw": 1,
+                "roll_per_yaw": -1,
+                "true_degree_of_change_correction": -90  # Hand trick the movement to understand why this is
+                # TODO: Check if all maneuvers in this list do that weird movement thing
+            },
+            -105: {
+                "heading_per_yaw": -1,
+                "pitch_per_yaw": 1,
+                "roll_per_yaw": -1
+            },
+            -120: {
+                "heading_per_yaw": -1,
+                "pitch_per_yaw": .5,
+                "roll_per_yaw": -.5
+            },
+            -135: {
+                "heading_per_yaw": -1,
+                "pitch_per_yaw": .5,
+                "roll_per_yaw": -.5
+            },
+            -150: {
+                "heading_per_yaw": -1,
+                "pitch_per_yaw": .33334,
+                "roll_per_yaw": -.33334
+            },
+            -165: {
+                "heading_per_yaw": -1,
+                "pitch_per_yaw": .25,
+                "roll_per_yaw": -.25
+            }
         }

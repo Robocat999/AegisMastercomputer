@@ -9,7 +9,7 @@ class ValueBasedCalculator:
 
         self.pitch_change = 0
         self.roll_change = 0
-        self.yaw_change = 0
+        self.heading_change = 0
         self.airspeed_change = 0
         self.altitude_change = 0
         self.travel_distance = 0
@@ -20,7 +20,9 @@ class ValueBasedCalculator:
         Calculates the roll changes
         :return:
         """
-        self.degrees_traveled += abs(roll_input)
+        self.roll_change = roll_input
+        heading_multiplier = self.plane.pitch_roll_to_heading_mods[roll_input]
+        self.heading_change += roll_input * heading_multiplier
         return
 
     def _calculate_pitch(self, pitch_input):
@@ -28,7 +30,7 @@ class ValueBasedCalculator:
         Calculates the pitch changes
         :return:
         """
-        self.degrees_traveled += abs(pitch_input)
+
         return
 
     def _calculate_yaw(self, yaw_input):
@@ -36,7 +38,15 @@ class ValueBasedCalculator:
         Calculates the yaw changes
         :return:
         """
-        self.degrees_traveled = abs(yaw_input)
+
+        return
+
+    def _calculate_geeforces(self):
+        """
+        Calculates the geeforces
+        :return:
+        """
+
         return
 
     def calculate_maneuver(self):
@@ -45,8 +55,9 @@ class ValueBasedCalculator:
         :return:
         """
         # Order is important
+        self.heading_change += self.plane.roll_to_heading[self.plane.roll]  # Calculates drift
         self._calculate_roll()
         self._calculate_pitch()
         self._calculate_yaw()
-
+        self._calculate_geeforces()
         return
