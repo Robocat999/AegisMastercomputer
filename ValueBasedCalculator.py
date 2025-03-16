@@ -15,13 +15,29 @@ class ValueBasedCalculator:
         self.travel_distance = 0
         self.degrees_traveled = 0
 
+    def _reset_calculator_values(self):
+        """
+        Resets the numerical values stored in the calculator. Use before starting a new calculation
+        :return:
+        """
+        self.maneuver_airspeed = 0
+
+        self.pitch_change = 0
+        self.roll_change = 0
+        self.heading_change = 0
+        self.airspeed_change = 0
+        self.altitude_change = 0
+        self.travel_distance = 0
+        self.degrees_traveled = 0
+        return
+
     def _calculate_roll(self, roll_input):
         """
         Calculates the roll changes
         :return:
         """
-        self.roll_change = roll_input
-        heading_multiplier = self.plane.pitch_roll_to_heading_mods[roll_input]
+        self.roll_change += roll_input
+        heading_multiplier = self.plane.pitch_roll_to_heading_mods[self.plane.pitch]
         self.heading_change += roll_input * heading_multiplier
         return
 
@@ -30,7 +46,11 @@ class ValueBasedCalculator:
         Calculates the pitch changes
         :return:
         """
-
+        current_plane_roll = self.plane.roll + self.roll_change
+        pitch_multiplier = self.plane.roll_pitch_mods[current_plane_roll]["pitch_per_pitch"]
+        heading_multiplier = self.plane.roll_pitch_mods[current_plane_roll]["heading_per_pitch"]
+        self.pitch_change += pitch_input * pitch_multiplier
+        self.heading_change += pitch_input * heading_multiplier
         return
 
     def _calculate_yaw(self, yaw_input):
