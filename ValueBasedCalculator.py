@@ -3,10 +3,10 @@ class ValueBasedCalculator:
     Makes predictions based off of plane values
     """
 
-    def __init__(self):
+    def __init__(self, plane=None):
         self.DEGREE_OF_CHANGE_DIVISOR = 15
 
-        self.plane = None
+        self.plane = plane
         self.maneuver_airspeed = 0
 
         self.pitch_change = 0
@@ -44,6 +44,8 @@ class ValueBasedCalculator:
         self.roll_change += roll_input
         heading_multiplier = self.plane.pitch_roll_to_heading_mods[self.plane.pitch]
         self.heading_change += roll_input * heading_multiplier
+        print(f"  pitch here {self.plane.pitch}  heading mult {heading_multiplier}  calc {roll_input * heading_multiplier}")
+        print(f"  heading change here {self.heading_change}")
         return
 
     def _calculate_pitch(self, pitch_input):
@@ -74,8 +76,11 @@ class ValueBasedCalculator:
         pitch_roll_modifier = self.plane.pitch_yaw_mods[current_pitch]["roll_per_yaw"]
 
         self.pitch_change += (yaw_input * roll_pitch_modifier) + (yaw_input * pitch_pitch_modifier)
-        self.heading_change += (yaw_input * roll_heading_modifier) + (yaw_input + pitch_heading_modifier)
+        self.heading_change += (yaw_input * roll_heading_modifier) + (yaw_input * pitch_heading_modifier)
         self.roll_change += yaw_input * pitch_roll_modifier
+        # print(f"  yaw input {yaw_input}")
+        # print(f"    roll mod {roll_heading_modifier}  pitch mod {pitch_heading_modifier}")
+        # print(f"    heading change here {self.heading_change}")
 
         if "true_degree_of_change_correction" in self.plane.pitch_yaw_mods[current_pitch]:
             self.degree_of_change_corrections += self.plane.pitch_yaw_mods[current_pitch]["true_degree_of_change_correction"]
@@ -91,11 +96,18 @@ class ValueBasedCalculator:
         self.geeforces = self.plane.velocity * (degree_of_change / self.DEGREE_OF_CHANGE_DIVISOR) * self.plane.stick_pos_modifier
         return
 
+    def _update_plane(self):
+        self.plane.roll += self.roll_change
+        self.plane.pitch += self.pitch_change
+        self.plane.heading += self.heading_change
+        self.plane.geeforces = self.geeforces
+
     def calculate_maneuver(self, roll_input, pitch_input, yaw_input):
         """
         Calculates the end result of a manuver
         :return:
         """
+        print(f"  inputs {roll_input}  {pitch_input}  {yaw_input}")
         # Order is important
         self._reset_calculator_values()
         self.heading_change += self.plane.roll_to_heading[self.plane.roll]  # Calculates drift
@@ -103,4 +115,6 @@ class ValueBasedCalculator:
         self._calculate_pitch(pitch_input)
         self._calculate_yaw(yaw_input)
         self._calculate_geeforces()
+        self._update_plane()
+        print(f"  outputs {self.roll_change}  {self.pitch_change}  {self.heading_change}")
         return
